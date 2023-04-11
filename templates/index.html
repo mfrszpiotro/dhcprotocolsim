@@ -1,9 +1,5 @@
 {% extends 'appbase.html' %}
 
-{% macro static_link(img) -%}
-/static/images/{{ img }}
-{%- endmacro %}
-
 {% block content %}
 <div class="abs">
   <div class="rel">
@@ -11,8 +7,8 @@
   </div>
   <div class="rel soft-page">
     <div>
-          <!-- Carousel -->
-    <div id="demo" class="carousel slide" data-bs-ride="carousel">
+    <!-- Carousel -->
+    <div id="demo" class="carousel-dark carousel slide" data-bs-ride="carousel">
 
       <!-- Indicators/dots -->
       <div class="carousel-indicators">
@@ -34,19 +30,17 @@
         <div class="carousel-item active">
           <div class="in-carousel center flex">
             <textarea disabled class="descr">TEST ENTITY DESCRIPTION...</textarea>
-            <textarea disabled class="descr">TEST ENTITY DESCRIPTION...</textarea>
-            <textarea disabled class="descr">TEST ENTITY DESCRIPTION...</textarea>
           </div>
         </div>
         {% for book in books %}
         <div class="carousel-item">
           <div class="in-carousel flex" >
-            <textarea {% if session.get('logged') %} disabled {% endif %} class="descr">TEST ENTITY DESCRIPTION...</textarea>
+            <textarea class="descr">TEST ENTITY DESCRIPTION...</textarea>
           </div>
         </div>
         {% endfor %}
       </div>
-
+      
       <!-- Left and right controls/icons -->
       <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
         <span class="carousel-control-prev-icon"></span>
@@ -55,12 +49,11 @@
         <span class="carousel-control-next-icon"></span>
       </button>
     </div>
-
-    </div>
-
   </div>
 </div>
+<div class="rel">
+  <button type="button" class="form-center btn btn-success">Simulate!</button>  
+</div>
 
-  
-  
+
 {% endblock %}

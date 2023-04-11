@@ -14,10 +14,10 @@
 
 .success {
     padding:20px;
-    color: white;
+    color: #292929;
     margin-bottom:15px;
-    background-color: #292929;
-    border: 3px solid white;
+    background-color: white;
+    border: 3px solid greenyellow;
     max-width: 350px;
     animation-duration: 1s;
     animation-name: fromleft;
@@ -25,10 +25,10 @@
 
 .error {
     padding:20px;
-    color: white;
+    color: #292929;
     margin-bottom:15px;
-    background-color: #292929;
-    border: 3px solid white;
+    background-color: white;
+    border: 3px solid #292929;
     max-width: 350px;
     animation-duration: 1s;
     animation-name: fromright;
@@ -36,7 +36,7 @@
 
 .closebtn-success {
     margin-left:15px;
-    color:white;
+    color:greenyellow;
     font-weight: bold;
     float: right;
     font-size: 22px;
@@ -45,12 +45,12 @@
 }
 
 .closebtn-success:hover {
-    color: #43FA6E;
+    color: black;
   }
 
 .closebtn-error {
     margin-right:15px;
-    color:white;
+    color:red;
     font-weight: bold;
     float: left;
     font-size: 22px;
@@ -59,7 +59,7 @@
 }
 
 .closebtn-error:hover {
-    color: red;
+    color: black;
   }
   
 @keyframes fromright {
