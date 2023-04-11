@@ -1,2 +1,1 @@
-# dhcprotocolsim
-Visualize DHCP Connection with our simulator
+# DHCP CONNECTION SIMULATOR
