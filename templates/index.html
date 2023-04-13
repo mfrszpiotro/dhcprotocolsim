@@ -3,7 +3,8 @@
 {% block content %}
 <div class="abs">
   <div class="rel">
-    <p>DHCP SIMULATOR</p>
+    <p>PROTOCOLISM</p>
+    <p class="sub-p">protocol language simulator</p>
   </div>
   <div class="rel soft-page">
     <div>
@@ -32,6 +33,11 @@
             <textarea disabled class="descr">TEST ENTITY DESCRIPTION...</textarea>
           </div>
         </div>
+        <div class="carousel-item">
+          <div class="in-carousel flex" >
+            <textarea class="descr">TEST ENTITY DESCRIPTION...</textarea>
+          </div>
+        </div>
         {% for book in books %}
         <div class="carousel-item">
           <div class="in-carousel flex" >
@@ -51,9 +57,5 @@
     </div>
   </div>
 </div>
-<div class="rel">
-  <button type="button" class="form-center btn btn-success">Simulate!</button>  
-</div>
-
 
 {% endblock %}
