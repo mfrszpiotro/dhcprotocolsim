@@ -1,3 +1,8 @@
+.embed-pdf{
+  width: 90%;
+  height: 1180px;
+}
+
 .force-white{
   margin-left: auto;
   width: 250px;
@@ -72,13 +77,13 @@
   flex-flow: wrap;
 }
 
-.descr{
+.step{
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 25px;
   margin-top: 5px;
   min-width: 74%;
-  min-height: 200px;
+  height: 30px;
   background-color: white;
   font-family: 'Cambria';
   color: black;
@@ -108,8 +113,8 @@ h2 {
 
 .sub-p {
   color: whitesmoke;
-  font-size: 20px;
-  margin-bottom: 20px;
+  font-size: 30px;
+  margin-bottom: 30px;
 }
 
 p {
@@ -118,7 +123,7 @@ p {
   font-family: "serif";
   overflow: hidden;    
   font-family: 'Cambria'; 
-  font-size: 40px;
+  font-size: 60px;
   word-wrap: break-word;
   text-align: center;
 }

@@ -1,7 +1,8 @@
-from flask import Flask, redirect, render_template, flash, url_for, request, session
+from flask import Flask, flash, redirect, render_template, url_for, request, session
 from flask_bootstrap import Bootstrap5
-from forms import LoginForm
+
 from entity import Entity
+from forms import LoginForm
 
 # create the app
 app = Flask(__name__)
@@ -16,19 +17,39 @@ bootstrap = Bootstrap5(app)
 def index():
     if request.method == "POST":
         if request.form.get("start"):
+            session["descriptions"] = [[["", "", "", ""], ["", "", "", ""], ["", "", "", ""]]]
             return redirect(url_for("define"))
+        
     return render_template("index.html")
 
 
 @app.route("/define", methods=["GET", "POST"])
 def define():
-    flash("Please input at least one DHCP entity description below.", "success")
-    return render_template("define.html")
+    flash("Please input at least one protocol entity description below.", "success")
+    if request.method == "POST":
+        if request.form.get("simulate"):
+            session.pop('_flashes', None)
+            return redirect(url_for("simulation"))
+        
+        if request.form.get("add"):
+            session.pop('_flashes', None)
+            session["descriptions"].append([["", "", "", ""], ["", "", "", ""], ["", "", "", ""]])
+        
+        if request.form.get("back"):
+            return redirect(url_for("index"))
+        
+    return render_template("define.html", page_descriptions=session.get("descriptions")[1:], first_triplet=session.get("descriptions")[0])
 
 
-@app.route("/secret")
-def secret():
-    return render_template("secret.html")
+@app.route("/define/simulation", methods=["GET", "POST"])
+def simulation():
+    flash("test", "error")
+    session.pop('_flashes', None)
+    if request.method == "POST":
+        if request.form.get("back"):
+            return redirect(url_for("index"))
+        
+    return render_template("simulation.html")
 
 
 if __name__ == "__main__":
