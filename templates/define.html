@@ -7,9 +7,9 @@
     <p class="sub-p">protocol language simulator</p>
   </div>
   <div class="rel soft-page">
-    <form method="post">
-      <button type="submit" class="btn btn-danger" name="back" value="back">Back to manual</button>
+    <form action="" method="post">
       <button type="submit" class="btn btn-success" name="simulate" value="simulate">Simulate!</button>
+      <button type="submit" class="btn btn-danger" name="back" value="back">Back to manual</button>
     <!-- Carousel -->
     <div id="demo" class="carousel-dark carousel slide" data-bs-ride="carousel">
 
@@ -32,21 +32,21 @@
                   <h3>Entity #1</h3>
                   {% for index in range(first_triplet[0]|length) %}
                     {{index+1}}:
-                    <div class="col-sm"> <input type="text" class="step form-control" name="0" value="{{first_triplet[0][0]}}"></div>
+                    <div class="col-sm"> <input type="text" class="step form-control" name="e1r{{ index+1 }}" value="{{first_triplet[0][0]}}"></div>
                   {% endfor %}
                 </div>
                 <div class="column">
                   <h3>Entity #2</h3>
                   {% for index in range(first_triplet[1]|length) %}
                     {{index+1}}:
-                    <div class="col-sm"> <input type="text" class="step form-control" name="1" value="{{first_triplet[1][0]}}"></div>
+                    <div class="col-sm"> <input type="text" class="step form-control" name="e2r{{ index+1 }}" value="{{first_triplet[1][0]}}"></div>
                   {% endfor %}
                 </div>
                 <div class="column">
                   <h3>Entity #3</h3>
                   {% for index in range(first_triplet[2]|length) %}
                     {{index+1}}:
-                    <div class="col-sm"> <input type="text" class="step form-control" name="2" value="{{first_triplet[2][0]}}"></div>
+                    <div class="col-sm"> <input type="text" class="step form-control" name="e3r{{ index+1 }}" value="{{first_triplet[2][0]}}"></div>
                   {% endfor %}
                 </div>
               </div>
@@ -57,24 +57,24 @@
               <div class="in-carousel">
                 <div class="flex-container">
                   <div class="column">
-                    <h3>Entity #{{ loop.index*3+1}}</h3>
+                    <h3>Entity #{{ loop.index*3+1 }}</h3>
                     {% for index in range(triplet[0]|length) %}
                       {{index+1}}:
-                      <div class="col-sm"> <input type="text" class="step form-control" name="0" value="{{triplet[0][0]}}"></div>
+                      <div class="col-sm"> <input type="text" class="step form-control" name="e{{ loop.index*3+1 }}r{{ index+1 }}" value="{{triplet[0][0]}}"></div>
                     {% endfor %}
                   </div>
                   <div class="column">
-                    <h3>Entity #{{ loop.index*3+2}}</h3>
+                    <h3>Entity #{{ loop.index*3+2 }}</h3>
                     {% for index in range(triplet[1]|length) %}
                       {{index+1}}:
-                      <div class="col-sm"> <input type="text" class="step form-control" name="1" value="{{triplet[1][0]}}"></div>
+                      <div class="col-sm"> <input type="text" class="step form-control" name="e{{ loop.index*3+2 }}r{{ index+1 }}" value="{{triplet[1][0]}}"></div>
                     {% endfor %}
                   </div>
                   <div class="column">
-                    <h3>Entity #{{ loop.index*3+3}}</h3>
+                    <h3>Entity #{{ loop.index*3+3 }}</h3>
                     {% for index in range(triplet[2]|length) %}
                       {{index+1}}:
-                      <div class="col-sm"><input type="text" class="step form-control" name="2" value="{{triplet[2][0]}}"></div>
+                      <div class="col-sm"><input type="text" class="step form-control" name="e{{ loop.index*3+3 }}r{{ index+1 }}" value="{{triplet[2][0]}}"></div>
                     {% endfor %}
                   </div>
                 </div>
@@ -86,11 +86,10 @@
               <div class="container">
                 <div class="row">
                   <div class="col-sm"></div>
-                  <div class="col-sm"> <button type="button" class="btn btn-dark" name="add" value="add">Add more entities</button> </div>
+                  <div class="col-sm"> <button type="submit" class="btn btn-dark" name="add" value="add">Add more entities</button> </div>
                   <div class="col-sm"></div>
                 </div>
               </div>
-              
             </div>
           </div>
         </div>

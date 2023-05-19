@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap5
 
 from entity import Entity
 from forms import LoginForm
+from utils import create_triplet
 
 # create the app
 app = Flask(__name__)
@@ -17,7 +18,7 @@ bootstrap = Bootstrap5(app)
 def index():
     if request.method == "POST":
         if request.form.get("start"):
-            session["descriptions"] = [[["", "", "", ""], ["", "", "", ""], ["", "", "", ""]]]
+            session["descriptions"] = [create_triplet("", 5)]
             return redirect(url_for("define"))
         
     return render_template("index.html")
@@ -28,12 +29,17 @@ def define():
     flash("Please input at least one protocol entity description below.", "success")
     if request.method == "POST":
         if request.form.get("simulate"):
-            session.pop('_flashes', None)
+            session.pop("_flashes", None)
+            entities = []
+            for index in range(len(session.get("descriptions"))*3):
+                check_begin = "e{}".format(str(index+1))
+                entities.append([ v for k, v in request.form.items() if k.startswith(check_begin)])
+            session["entities"] = entities
             return redirect(url_for("simulation"))
         
         if request.form.get("add"):
             session.pop('_flashes', None)
-            session["descriptions"].append([["", "", "", ""], ["", "", "", ""], ["", "", "", ""]])
+            session["descriptions"].append(create_triplet("", 5))
         
         if request.form.get("back"):
             return redirect(url_for("index"))
@@ -43,8 +49,8 @@ def define():
 
 @app.route("/define/simulation", methods=["GET", "POST"])
 def simulation():
-    flash("test", "error")
-    session.pop('_flashes', None)
+    entities = session.get("entities", [])
+    flash(entities, "success")
     if request.method == "POST":
         if request.form.get("back"):
             return redirect(url_for("index"))
