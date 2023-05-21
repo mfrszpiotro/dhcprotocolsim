@@ -15,20 +15,19 @@ class Simulation:
         self.entities = []
 
     def addEntity(self, entity):
-        self.entities.append(entity)
+        self.entities.insert(0, entity)
 
     def sendMessage(self, packet):
         for entity in self.entities:
             if entity.name == packet.destination:
                 entity.queue.append(packet.message)
 
-    #def listenMessage(self, entity): #wait_time=None):
-    #    while True:
-    #        print("works")
-    #        if entity.queue:
-    #            message = entity.queue.pop(0)
-    #            print(f"Recovered message: {message}")
-    #            break
+    # create listenMessage function that will pop the message from the queue
+    def listenMessage(self, entity):
+        if entity.queue:
+            message = entity.queue.pop(0)
+            print(f"Recovered message: {message}")
+            
 
     def print(self):
         list = []
