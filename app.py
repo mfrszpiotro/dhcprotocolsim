@@ -53,7 +53,7 @@ def define():
 def simulation():
     entities = session.get("entities", [])
 
-    simulation = testing.test_communication()
+    simulation = testing.test_3entity_communication()
     
     flash(simulation.print(), "success")
     if request.method == "POST":
