@@ -1,5 +1,6 @@
 from flask import Flask, flash, redirect, render_template, url_for, request, session
 from flask_bootstrap import Bootstrap5
+from entity import Entity, Packet, Simulation
 
 from entity import Entity
 from forms import LoginForm
@@ -50,7 +51,23 @@ def define():
 @app.route("/define/simulation", methods=["GET", "POST"])
 def simulation():
     entities = session.get("entities", [])
-    flash(entities, "success")
+
+    # Example of message sending
+    e1 = Entity(1)
+    e2 = Entity(2)
+    
+    simulation = Simulation()
+    
+    simulation.addEntity(e1)
+    simulation.addEntity(e2)
+    
+    p1 = Packet(1, 2, "there is no try")
+    simulation.sendMessage(p1)
+    
+    p2 = Packet(2, 1, "do or do not")
+    simulation.sendMessage(p2)
+    
+    flash(simulation.print(), "success")
     if request.method == "POST":
         if request.form.get("back"):
             return redirect(url_for("index"))
