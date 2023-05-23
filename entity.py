@@ -20,7 +20,11 @@ class Simulation:
     def sendMessage(self, packet):
         for entity in self.entities:
             if entity.name == packet.destination:
-                entity.queue.append(packet.message)
+                try:
+                    entity.queue.append(packet.message)
+                    print(f"Mesage from {packet.source} was sent to {packet.destination}!")
+                except Exception as e:
+                    print(f"Message could not be sent! {str(e)}")
 
     # create listenMessage function that will pop the message from the queue
     def listenMessage(self, entity):
