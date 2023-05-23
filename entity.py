@@ -21,7 +21,7 @@ class Simulation:
         for entity in self.entities:
             if entity.name == packet.destination:
                 try:
-                    entity.queue.append(packet.message)
+                    entity.queue.append(packet)
                     print(f"Mesage from {packet.source} was sent to {packet.destination}!")
                 except Exception as e:
                     print(f"Message could not be sent! {str(e)}")
