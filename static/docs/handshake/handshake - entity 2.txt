@@ -6,3 +6,5 @@
 
 3:
 	LISTEN * FROM 1;
+
+4:	SEND "OK" TO 1;
