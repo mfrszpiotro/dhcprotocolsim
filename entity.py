@@ -22,7 +22,8 @@ class Simulation:
             if entity.name == packet.destination:
                 try:
                     entity.queue.append(packet)
-                    print(f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};")
+                    log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
+                    writer("log.txt", "a", log)
                 except Exception as e:
                     print(f"Message could not be sent! {str(e)}")
 
@@ -30,7 +31,8 @@ class Simulation:
         if entity.queue:
             try:
                 packet = entity.queue.pop(0)
-                print(f"ENTITY {entity.name}: LISTEN '{packet.message}' FROM {packet.destination};")
+                log = f"ENTITY {entity.name}: LISTEN '{packet.message}' FROM {packet.destination};\n"
+                writer("log.txt", "a", log)
             except Exception as e:
                 print(f"Message could not be received! {str(e)}")
             
@@ -46,4 +48,8 @@ class Simulation:
     # while loop for send/listen execution, finised when no code is left to run
     def exec(self):
         pass
+
+def writer(filename, mode, log):
+    with open(filename, mode) as file:
+        file.write(log)
 
