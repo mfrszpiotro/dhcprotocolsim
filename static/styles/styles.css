@@ -1,3 +1,4 @@
+
 .embed-pdf{
   width: 90%;
   height: 1180px;
@@ -12,9 +13,9 @@
   font-size: 72px;
 }
 
-.center{
-  margin-left:auto;
-  margin-bottom:auto;
+.buttons-column{
+  display: flex;
+  justify-content: center;
 }
 
 .table-dark{
@@ -53,11 +54,15 @@
   margin-right: auto;
 }
 
+.rel-center{
+  position: relative;
+  text-align: center;
+}
+
 .rel{
   position: relative;
-  margin-left: 25px;
-  margin-right:-25px;
 }
+
 .abs{
   position: absolute;
   top: 12%;
@@ -97,13 +102,12 @@
 .soft-page{
   min-height: 440px;
   border-radius: 20px;
-  background: whitesmoke;
+  background: #ececec;
   box-shadow:  5px 5px 9px #272727,
                -5px -5px 9px #2b2b2b;
 }
 
 h2 {
-  font-family: 'Cambria';
   font-size: 40px;
   margin-left: 10px;
   word-wrap: normal;
@@ -122,7 +126,6 @@ p {
   text-shadow: 1px 1px 2px yellowgreen;
   font-family: "serif";
   overflow: hidden;    
-  font-family: 'Cambria'; 
   font-size: 60px;
   word-wrap: break-word;
   text-align: center;

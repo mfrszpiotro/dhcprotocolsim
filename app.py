@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config[
     "SECRET_KEY"
 ] = 'h+u5-sNA2%Fr&3"y"9nQEn==rfLjfKB{$RGShJ"$2I`d&j[5-J79:RJZoQJ('
-app.config["BOOTSTRAP_BOOTSWATCH_THEME"] = "lumen"
+app.config["BOOTSTRAP_BOOTSWATCH_THEME"] = "lux"
 bootstrap = Bootstrap5(app)
 
 
@@ -18,7 +18,7 @@ bootstrap = Bootstrap5(app)
 def index():
     if request.method == "POST":
         if request.form.get("start"):
-            session["descriptions"] = [create_triplet("", 5)]
+            session["descriptions"] = [create_triplet("", 4)]
             return redirect(url_for("define"))
         
     return render_template("index.html")
@@ -26,7 +26,7 @@ def index():
 
 @app.route("/define", methods=["GET", "POST"])
 def define():
-    flash("Please input at least one protocol entity description below.", "success")
+    flash("Please input at least one protocol entity description below.", "error")
     if request.method == "POST":
         if request.form.get("simulate"):
             session.pop("_flashes", None)
@@ -39,7 +39,7 @@ def define():
         
         if request.form.get("add"):
             session.pop('_flashes', None)
-            session["descriptions"].append(create_triplet("", 5))
+            session["descriptions"].append(create_triplet("", 4))
         
         if request.form.get("back"):
             return redirect(url_for("index"))
