@@ -22,7 +22,7 @@ class Simulation:
             if entity.name == packet.destination:
                 try:
                     entity.queue.append(packet)
-                    print(f"Mesage from {packet.source} was sent to {packet.destination}!")
+                    print(f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};")
                 except Exception as e:
                     print(f"Message could not be sent! {str(e)}")
 
@@ -30,7 +30,7 @@ class Simulation:
         if entity.queue:
             try:
                 packet = entity.queue.pop(0)
-                print(f"Entity {entity} recovered message: {packet.message} from {packet.destination}")
+                print(f"ENTITY {entity.name}: LISTEN '{packet.message}' FROM {packet.destination};")
             except Exception as e:
                 print(f"Message could not be received! {str(e)}")
             
