@@ -26,15 +26,18 @@ class Simulation:
                 except Exception as e:
                     print(f"Message could not be sent! {str(e)}")
 
-    # create listenMessage function that will pop the message from the queue
     def listenMessage(self, entity):
         if entity.queue:
-            message = entity.queue.pop(0)
-            print(f"Recovered message: {message}")
+            try:
+                packet = entity.queue.pop(0)
+                print(f"Entity {entity} recovered message: {packet.message} from {packet.destination}")
+            except Exception as e:
+                print(f"Message could not be received! {str(e)}")
             
 
     def print(self):
         list = []
+
         for entity in self.entities:
             list.append(f"Entity: {entity.name}, Queue: {entity.queue}")
 
