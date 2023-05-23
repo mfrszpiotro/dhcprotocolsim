@@ -18,12 +18,13 @@ class Simulation:
         self.entities.insert(0, entity)
 
     def sendMessage(self, packet):
+        log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
+        writer("log.txt", "a", log)
         for entity in self.entities:
             if entity.name == packet.destination:
                 try:
                     entity.queue.append(packet)
-                    log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
-                    writer("log.txt", "a", log)
+                    writer("log.txt", "a", f"{packet.message}' has been saved in ENTITY '{packet.destination}' queue;")
                 except Exception as e:
                     print(f"Message could not be sent! {str(e)}")
 
@@ -35,7 +36,6 @@ class Simulation:
                 writer("log.txt", "a", log)
             except Exception as e:
                 print(f"Message could not be received! {str(e)}")
-            
 
     def print(self):
         list = []
@@ -45,9 +45,6 @@ class Simulation:
 
         return list
 
-    # while loop for send/listen execution, finised when no code is left to run
-    def exec(self):
-        pass
 
 def writer(filename, mode, log):
     with open(filename, mode) as file:
