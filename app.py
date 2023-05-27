@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap5
 #from entity import Entity, Packet, Simulation
 import testing
 
-from entity import Entity
+from entity import Entity, logMaker
 from forms import LoginForm
 from utils import create_triplet
 
@@ -54,6 +54,8 @@ def simulation():
     entities = session.get("entities", [])
 
     simulation = testing.test_3entity_communication()
+
+    logMaker()
     
     flash(simulation.print(), "success")
     if request.method == "POST":
