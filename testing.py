@@ -1,7 +1,38 @@
 from entity import Entity, Packet, Simulation, createTimestamp
 
 def test_handshake():
-    pass
+    e1 = Entity(1)
+    e2 = Entity(2)
+    e3 = Entity(3)
+
+    simulation = Simulation()
+    logfile = createTimestamp()
+
+    simulation.addEntity(e1)
+    simulation.addEntity(e2)
+    simulation.addEntity(e3)
+
+    # STEP 1
+    p11 = Packet(1, 2, "HANDSHAKE")
+    p12 = Packet(2, 3, "HANDSHAKE")
+    simulation.sendMessage(p11, logfile)
+    simulation.listenMessage(p11, e2, logfile)
+    #remember about halting
+    simulation.listenMessage(p12, e3, logfile)
+    
+    # STEP 2
+    p21 = Packet(2, 1, "HANDSHAKE")
+    p22 = Packet(3, 2, "HANDSHAKE")
+    simulation.listenMessage(p21, e1, logfile)
+    simulation.sendMessage(p21, logfile)
+    simulation.sendMessage(p22, logfile)
+    
+    # STEP 3
+    p31 = Packet(1, 2, "SECRET VERIFIED MESSAGE")
+    simulation.sendMessage(p31, logfile)
+    simulation.listenMessage(Packet(1,1,""), e2, logfile)
+    simulation.listenMessage(Packet(1,1,""), e3, logfile)
+
 
 def test_2entity_communication():
     # Example of message sending

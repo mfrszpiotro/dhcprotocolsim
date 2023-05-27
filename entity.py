@@ -5,6 +5,7 @@ class Entity:
         self.name = name
         self.queue = []
         self.max_queue_length = max_queue_length
+        #self.halted = false
 
 
 class Packet:
@@ -21,6 +22,7 @@ class Simulation:
     def addEntity(self, entity):
         self.entities.insert(0, entity)
 
+    # check if halted, proceed only if false
     def sendMessage(self, packet, logfile):
         log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
         writer(logfile, "a", log)
@@ -28,22 +30,40 @@ class Simulation:
             if entity.name == packet.destination:
                 try:
                     entity.queue.append(packet)
-                    print(logfile)
-                    print(log)
                     writer(logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
                 except Exception as e:
+                    #TOBECHANGED
                     print(f"Message could not be sent! {str(e)}")
 
-    def listenMessage(self, entity, logfile):
+   # def listenMessage(self, entity, logfile):
+   #     #entity.halted = true
+   #     log = f"ENTITY {entity.name}: LISTEN '{packet.message}' FROM {packet.destination};\n"
+   #     if entity.queue:
+   #         try:
+   #             packet = entity.queue.pop(0)
+   #             writer(logfile, "a", log)
+   #             #entity.halted = false
+   #         except Exception as e:
+   #             #TOBECHANGED
+   #             #when halted 
+   #             print(f"Message could not be received! {str(e)}\n")
+
+    def listenMessage(self, packet, entity, logfile):
+        #entity.halted = true
+        log = f"ENTITY {packet.destination}: LISTEN '{packet.message}' FROM {packet.source};\n"
+        writer(logfile, "a", log)
         if entity.queue:
             try:
                 packet = entity.queue.pop(0)
-                log = f"ENTITY {entity.name}: LISTEN '{packet.message}' FROM {packet.destination};\n"
-                print(logfile)
-                print(log)
-                writer(logfile, "a", log)
+                #entity.halted = false
             except Exception as e:
+                #TOBECHANGED
+                #when halted 
                 print(f"Message could not be received! {str(e)}\n")
+
+    # if required action is issued later, but still in the same state, accept it
+    def checkFinish(self):
+        pass
 
     def print(self):
         list = []
@@ -62,7 +82,7 @@ def createTimestamp():
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime("%Y-%m-%d_%H-%M-%S")
 
-    file_name = f"log_{timestamp}.txt"
+    file_name = f"./logs/log_{timestamp}.txt"
     
     print(f"File '{file_name}' created with timestamp: {timestamp}")
 

@@ -53,7 +53,8 @@ def define():
 def simulation():
     entities = session.get("entities", [])
 
-    simulation = testing.test_3entity_communication()
+    #simulation = testing.test_3entity_communication()
+    testing.test_handshake()
 
     logfile = createTimestamp()
 
