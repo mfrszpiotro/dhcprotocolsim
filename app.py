@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap5
 #from entity import Entity, Packet, Simulation
 import testing
 
-from entity import Entity, logMaker
+from entity import Entity, createTimestamp 
 from forms import LoginForm
 from utils import create_triplet
 
@@ -55,9 +55,12 @@ def simulation():
 
     simulation = testing.test_3entity_communication()
 
-    logMaker()
-    
-    flash(simulation.print(), "success")
+    logfile = createTimestamp()
+
+    with open(logfile, "r") as file:
+        output = file.read()
+
+    flash(output, "success")
     if request.method == "POST":
         if request.form.get("back"):
             return redirect(url_for("index"))

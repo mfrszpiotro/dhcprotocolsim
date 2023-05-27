@@ -21,25 +21,29 @@ class Simulation:
     def addEntity(self, entity):
         self.entities.insert(0, entity)
 
-    def sendMessage(self, packet):
+    def sendMessage(self, packet, logfile):
         log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
-        writer("log.txt", "a", log)
+        writer(logfile, "a", log)
         for entity in self.entities:
             if entity.name == packet.destination:
                 try:
                     entity.queue.append(packet)
-                    writer("log.txt", "a", f"{packet.message}' has been saved in ENTITY '{packet.destination}' queue;")
+                    print(logfile)
+                    print(log)
+                    writer(logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
                 except Exception as e:
                     print(f"Message could not be sent! {str(e)}")
 
-    def listenMessage(self, entity):
+    def listenMessage(self, entity, logfile):
         if entity.queue:
             try:
                 packet = entity.queue.pop(0)
                 log = f"ENTITY {entity.name}: LISTEN '{packet.message}' FROM {packet.destination};\n"
-                writer("log.txt", "a", log)
+                print(logfile)
+                print(log)
+                writer(logfile, "a", log)
             except Exception as e:
-                print(f"Message could not be received! {str(e)}")
+                print(f"Message could not be received! {str(e)}\n")
 
     def print(self):
         list = []
@@ -54,14 +58,11 @@ def writer(filename, mode, log):
     with open(filename, mode) as file:
         file.write(log)
 
-def logMaker():
+def createTimestamp():
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime("%Y-%m-%d_%H-%M-%S")
 
     file_name = f"log_{timestamp}.txt"
-    
-    with open(file_name, "w") as file:
-        file.write("")
     
     print(f"File '{file_name}' created with timestamp: {timestamp}")
 
