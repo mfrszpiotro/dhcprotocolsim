@@ -35,19 +35,6 @@ class Simulation:
                     #TOBECHANGED
                     print(f"Message could not be sent! {str(e)}")
 
-   # def listenMessage(self, entity, logfile):
-   #     #entity.halted = true
-   #     log = f"ENTITY {entity.name}: LISTEN '{packet.message}' FROM {packet.destination};\n"
-   #     if entity.queue:
-   #         try:
-   #             packet = entity.queue.pop(0)
-   #             writer(logfile, "a", log)
-   #             #entity.halted = false
-   #         except Exception as e:
-   #             #TOBECHANGED
-   #             #when halted 
-   #             print(f"Message could not be received! {str(e)}\n")
-
     def listenMessage(self, packet, entity, logfile):
         #entity.halted = true
         log = f"ENTITY {packet.destination}: LISTEN '{packet.message}' FROM {packet.source};\n"
