@@ -28,41 +28,37 @@ class Simulation:
                 return entity
         return None
 
-    # check if halted, proceed only if false
     def sendMessage(self, packet, logfile):
         sender = self.getEntity(packet.source)
 
-        if sender.halted == False:
+        if not sender.halted:
             log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
             writer(logfile, "a", log)
+
             for entity in self.entities:
                 if entity.name == packet.destination:
                     try:
                         entity.queue.append(packet)
                         writer(logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
                     except Exception as e:
-                        #TOBECHANGED
                         print(f"Message could not be sent! {str(e)}")
-        else:
-            pass
 
     def listenMessage(self, packet, entity, logfile):
-        entity.halted = True
-        log = f"ENTITY {packet.destination}: LISTEN '{packet.message}' FROM {packet.source};\n"
-        writer(logfile, "a", log)
-        if entity.queue:
-            try:
-                packet = entity.queue.pop(0)
-                entity.halted = False
-            except Exception as e:
-                #TOBECHANGED
-                #when halted 
-                print(f"Message could not be received! {str(e)}\n")
+        if not entity.halted:
+            entity.halted = True
+            log = f"ENTITY {packet.destination}: LISTEN '{packet.message}' FROM {packet.source};\n"
+            writer(logfile, "a", log)
 
+            if entity.queue:
+                try:
+                    packet = entity.queue.pop(0)
+                    log = f"'{packet.message}' has been saved in ENTITY {packet.destination} queue;\n"
+                    entity.halted = False
+                except Exception as e:
+                    print(f"Message could not be received! {str(e)}\n")
 
-    # if required action is issued later, but still in the same state, accept it
     def checkFinish(self):
-        pass
+        self.entites = [entity for entity in self.entities if not entity.halted]
 
     def print(self):
         list = []
