@@ -2,108 +2,122 @@
 
 {% block content %}
 <div class="abs">
+  <form method="post">
   <div class="rel">
-    <h1 class=sub-p> protocol language simulator</h1>
+    <p>PROTOCOLISM</p>
   </div>
   <div class="rel soft-page">
-    <form action="" method="post">
-    <!-- Carousel -->
-    <div id="demo" class="carousel-dark carousel slide" data-bs-ride="carousel">
 
-      <!-- Indicators/dots -->
+    <div id="carousel" class="carousel-dark carousel slide" data-bs-ride="carousel">
+
       <div class="carousel-indicators">
-        <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active"></button>
         {% for index in range(page_descriptions|length) %}
-          <button type="button" data-bs-target="#demo" data-bs-slide-to="{{ index+1 }}"></button>
+          <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ index+1 }}"></button>
         {% endfor %}
-        <button type="button" data-bs-target="#demo" data-bs-slide-to="{{ page_descriptions|length+1 }}"></button>
+        <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ page_descriptions|length+1 }}"></button>
       </div>
 
-      <!-- The slideshow/carousel -->
-        <div class="carousel-inner">
-
-          <div class="carousel-item active">
-            <div class="in-carousel">
-              <div class="flex-container">
-                <div class="column">
-                  <h3>Entity #1</h3>
-                  {% for index in range(first_triplet[0]|length) %}
-                    {{index+1}}:
-                    <div class="col-sm"> <input type="text" class="step form-control" name="e1r{{ index+1 }}" value="{{first_triplet[0][0]}}"></div>
-                  {% endfor %}
-                </div>
-                <div class="column">
-                  <h3>Entity #2</h3>
-                  {% for index in range(first_triplet[1]|length) %}
-                    {{index+1}}:
-                    <div class="col-sm"> <input type="text" class="step form-control" name="e2r{{ index+1 }}" value="{{first_triplet[1][0]}}"></div>
-                  {% endfor %}
-                </div>
-                <div class="column">
-                  <h3>Entity #3</h3>
-                  {% for index in range(first_triplet[2]|length) %}
-                    {{index+1}}:
-                    <div class="col-sm"> <input type="text" class="step form-control" name="e3r{{ index+1 }}" value="{{first_triplet[2][0]}}"></div>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-          </div>
-          {% for triplet in page_descriptions %}
-            <div class="carousel-item">
+      <div class="col-centered width-in-carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
               <div class="in-carousel">
                 <div class="flex-container">
                   <div class="column">
-                    <h3>Entity #{{ loop.index*3+1 }}</h3>
-                    {% for index in range(triplet[0]|length) %}
+                    <h3>Entity #1</h3>
+                    {% for index in range(first_triplet[0]|length) %}
                       {{index+1}}:
-                      <div class="col-sm"> <input type="text" class="step form-control" name="e{{ loop.index*3+1 }}r{{ index+1 }}" value="{{triplet[0][0]}}"></div>
+                      <div class="col-sm"> <input type="text" class="step form-control" name="e1r{{ index+1 }}" value="{{first_triplet[0][0]}}"></div>
                     {% endfor %}
                   </div>
                   <div class="column">
-                    <h3>Entity #{{ loop.index*3+2 }}</h3>
-                    {% for index in range(triplet[1]|length) %}
+                    <h3>Entity #2</h3>
+                    {% for index in range(first_triplet[1]|length) %}
                       {{index+1}}:
-                      <div class="col-sm"> <input type="text" class="step form-control" name="e{{ loop.index*3+2 }}r{{ index+1 }}" value="{{triplet[1][0]}}"></div>
+                      <div class="col-sm"> <input type="text" class="step form-control" name="e2r{{ index+1 }}" value="{{first_triplet[1][0]}}"></div>
                     {% endfor %}
                   </div>
                   <div class="column">
-                    <h3>Entity #{{ loop.index*3+3 }}</h3>
-                    {% for index in range(triplet[2]|length) %}
+                    <h3>Entity #3</h3>
+                    {% for index in range(first_triplet[2]|length) %}
                       {{index+1}}:
-                      <div class="col-sm"><input type="text" class="step form-control" name="e{{ loop.index*3+3 }}r{{ index+1 }}" value="{{triplet[2][0]}}"></div>
+                      <div class="col-sm"> <input type="text" class="step form-control" name="e3r{{ index+1 }}" value="{{first_triplet[2][0]}}"></div>
                     {% endfor %}
                   </div>
                 </div>
               </div>
             </div>
-          {% endfor %}
-          <div class="carousel-item">
-            <div class="in-carousel">
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm"></div>
-                  <div class="col-sm"> <button type="submit" class="btn btn-dark" name="add" value="add">Add more entities</button> </div>
-                  <div class="col-sm"></div>
+            {% for triplet in page_descriptions %}
+              <div class="carousel-item">
+                <div class="in-carousel">
+                  <div class="flex-container">
+                    <div class="column">
+                      <h3>Entity #{{ loop.index*3+1 }}</h3>
+                      {% for index in range(triplet[0]|length) %}
+                        {{index+1}}:
+                        <div class="col-sm"> <input type="text" class="step form-control" name="e{{ loop.index*3+1 }}r{{ index+1 }}" value="{{triplet[0][0]}}"></div>
+                      {% endfor %}
+                    </div>
+                    <div class="column">
+                      <h3>Entity #{{ loop.index*3+2 }}</h3>
+                      {% for index in range(triplet[1]|length) %}
+                        {{index+1}}:
+                        <div class="col-sm"> <input type="text" class="step form-control" name="e{{ loop.index*3+2 }}r{{ index+1 }}" value="{{triplet[1][0]}}"></div>
+                      {% endfor %}
+                    </div>
+                    <div class="column">
+                      <h3>Entity #{{ loop.index*3+3 }}</h3>
+                      {% for index in range(triplet[2]|length) %}
+                        {{index+1}}:
+                        <div class="col-sm"><input type="text" class="step form-control" name="e{{ loop.index*3+3 }}r{{ index+1 }}" value="{{triplet[2][0]}}"></div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+            <div class="carousel-item">
+              <div class="in-carousel">
+                <div class="flex-container">
+                  <div class="column hidden">
+                    <h3>Entity #1</h3>
+                    {% for index in range(first_triplet[0]|length) %}
+                      {{index+1}}:
+                      <div class="col-sm"> <input type="text" class="step form-control"></div>
+                    {% endfor %}
+                  </div>
+                  <div class="column">
+                    <button type="submit" class="btn btn-primary width-in-carousel button-in-carousel" name="add" value="add">Add more entities</button>
+                    {% for index in range(first_triplet[0]|length) %}
+                      <div class="col-sm hidden"> <input type="text" class="step form-control"></div>
+                    {% endfor %}
+                  </div>
+                  <div class="column hidden">
+                    <h3>Entity #1</h3>
+                    {% for index in range(first_triplet[0]|length) %}
+                      {{index+1}}:
+                      <div class="col-sm"> <input type="text" class="step form-control"></div>
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </form>
-      
-      <!-- Left and right controls/icons -->
-      <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
+          </div> 
+      </div>
     </div>
-    <div class="buttons-column">
-      <button type="submit" class="btn btn-primary" name="simulate" value="simulate">Simulate!</button>
-    </div>
+
   </div>
+  <div class="buttons-column">
+    <button type="submit" class="btn btn-success width-in-carousel button-in-carousel" name="simulate" value="simulate">Simulate!</button>
+  </div>
+</form>
 </div>
+
+<button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+  <span class="carousel-control-prev-icon"></span>
+</button>
+<button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+  <span class="carousel-control-next-icon"></span>
+</button>
 
 {% endblock %}

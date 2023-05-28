@@ -1,7 +1,25 @@
+.hidden{
+  visibility: hidden;
+}
+
+.margin-top-bot{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.button-in-carousel{
+  border-radius: 20px !important;
+  box-shadow:  1px 1px 2px #272727,
+               -1px -1px 2px #2b2b2b !important;
+}
+
+.width-in-carousel{
+  width: 100%;
+}
 
 .embed-pdf{
-  width: 90%;
   height: 1180px;
+  width: 100%;
 }
 
 .force-white{
@@ -16,6 +34,7 @@
 .buttons-column{
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .table-dark{
@@ -43,6 +62,11 @@
   background: #292929;
   box-shadow:  2px 2px 4px #272727,
                -2px -2px 4px #2b2b2b;
+}
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
 }
 
 .button-center{
@@ -123,10 +147,9 @@ h2 {
 
 p {
   color: white;
-  text-shadow: 1px 1px 2px yellowgreen;
-  font-family: "serif";
+  text-shadow: 2px 2px 3px yellowgreen;
   overflow: hidden;    
-  font-size: 60px;
+  font-size: 6vw;
   word-wrap: break-word;
   text-align: center;
 }

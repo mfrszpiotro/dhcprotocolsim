@@ -26,7 +26,6 @@ def index():
 
 @app.route("/define", methods=["GET", "POST"])
 def define():
-    flash("Please input at least one protocol entity description below.", "error")
     if request.method == "POST":
         if request.form.get("simulate"):
             session.pop("_flashes", None)
