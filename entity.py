@@ -1,4 +1,4 @@
-import datetime
+import utils
 
 class Entity:
     def __init__(self, name, max_queue_length=1):
@@ -33,13 +33,13 @@ class Simulation:
 
         if not sender.halted:
             log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
-            writer(logfile, "a", log)
+            utils.writer(logfile, "a", log)
 
             for entity in self.entities:
                 if entity.name == packet.destination:
                     try:
                         entity.queue.append(packet)
-                        writer(logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
+                        utils.writer(logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
                     except Exception as e:
                         print(f"Message could not be sent! {str(e)}")
 
@@ -47,7 +47,7 @@ class Simulation:
         if not entity.halted:
             entity.halted = True
             log = f"ENTITY {packet.destination}: LISTEN '{packet.message}' FROM {packet.source};\n"
-            writer(logfile, "a", log)
+            utils.writer(logfile, "a", log)
 
             if entity.queue:
                 try:
@@ -62,24 +62,8 @@ class Simulation:
 
     def print(self):
         list = []
-
         for entity in self.entities:
             list.append(f"Entity: {entity.name}, Queue: {entity.queue}")
 
         return list
-
-
-def writer(filename, mode, log):
-    with open(filename, mode) as file:
-        file.write(log)
-
-def createTimestamp():
-    current_time = datetime.datetime.now()
-    timestamp = current_time.strftime("%Y-%m-%d_%H-%M-%S")
-
-    logFile = f"./logs/log_{timestamp}.txt"
-    
-    print(f"File '{logFile}' created with timestamp: {timestamp}")
-
-    return logFile
 

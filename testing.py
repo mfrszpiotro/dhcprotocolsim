@@ -1,4 +1,5 @@
-from entity import Entity, Packet, Simulation, createTimestamp, writer
+from entity import Entity, Packet, Simulation
+import utils
 
 def test_handshake():
     e1 = Entity(1)
@@ -6,14 +7,14 @@ def test_handshake():
     e3 = Entity(3)
 
     simulation = Simulation()
-    logfile = createTimestamp()
+    logfile = utils.createTimestamp()
 
     simulation.addEntity(e1)
     simulation.addEntity(e2)
     simulation.addEntity(e3)
 
     # STEP 1
-    writer(logfile, "a", "STEP 1\n")
+    utils.writer(logfile, "a", "STEP 1\n")
     p11 = Packet(1, 2, "HANDSHAKE")
     p12 = Packet(2, 3, "HANDSHAKE")
     simulation.sendMessage(p11, logfile)
@@ -22,7 +23,7 @@ def test_handshake():
     simulation.checkFinish()
     
     # STEP 2
-    writer(logfile, "a", "STEP 2\n")
+    utils.writer(logfile, "a", "STEP 2\n")
     p21 = Packet(2, 1, "HANDSHAKE")
     p22 = Packet(3, 2, "HANDSHAKE")
     simulation.sendMessage(p21, logfile)
@@ -31,7 +32,7 @@ def test_handshake():
     simulation.checkFinish()
     
     # STEP 3
-    writer(logfile, "a", "STEP 3\n")
+    utils.writer(logfile, "a", "STEP 3\n")
     p31 = Packet(1, 2, "SECRET VERIFIED MESSAGE")
     simulation.sendMessage(p31, logfile)
     simulation.listenMessage(Packet(1,1,""), e2, logfile)
@@ -39,7 +40,7 @@ def test_handshake():
     simulation.checkFinish()
 
     # STEP 4
-    writer(logfile, "a", "STEP 4\n")
+    utils.writer(logfile, "a", "STEP 4\n")
     p41 = Packet(2, 1, "OK")
     simulation.sendMessage(p41, logfile)
     simulation.checkFinish()
