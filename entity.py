@@ -18,6 +18,7 @@ class Packet:
 class Simulation:
     def __init__(self):
         self.entities = []
+        self.logfile = utils.createTimestamp()
 
     def addEntity(self, entity):
         self.entities.insert(0, entity)
@@ -28,26 +29,26 @@ class Simulation:
                 return entity
         return None
 
-    def sendMessage(self, packet, logfile):
+    def sendMessage(self, packet):
         sender = self.getEntity(packet.source)
 
         if not sender.halted:
             log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
-            utils.writer(logfile, "a", log)
+            utils.writer(self.logfile, "a", log)
 
             for entity in self.entities:
                 if entity.name == packet.destination:
                     try:
                         entity.queue.append(packet)
-                        utils.writer(logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
+                        utils.writer(self.logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
                     except Exception as e:
                         print(f"Message could not be sent! {str(e)}")
 
-    def listenMessage(self, packet, entity, logfile):
+    def listenMessage(self, packet, entity):
         if not entity.halted:
             entity.halted = True
             log = f"ENTITY {packet.destination}: LISTEN '{packet.message}' FROM {packet.source};\n"
-            utils.writer(logfile, "a", log)
+            utils.writer(self.logfile, "a", log)
 
             if entity.queue:
                 try:
