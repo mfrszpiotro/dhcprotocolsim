@@ -61,10 +61,3 @@ class Simulation:
     def checkFinish(self):
         self.entites = [entity for entity in self.entities if not entity.halted]
 
-    def print(self):
-        list = []
-        for entity in self.entities:
-            list.append(f"Entity: {entity.name}, Queue: {entity.queue}")
-
-        return list
-
