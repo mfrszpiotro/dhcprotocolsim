@@ -3,7 +3,7 @@
 2:
 	LISTEN ’ DHCP OFFER’ from 3; 
 3:
-	SEND ’ DHCP OFFER’ to 3; 
+	SEND ’ DHCP REQUEST’ to 3; 
 4:
 	LISTEN ’ DHCP ACKNOWLEDGE’ from 3; 
 5:
