@@ -1,6 +1,20 @@
 from entity import Entity, Packet, Simulation
 import utils
 
+def test_textTranslate():
+    e1 = Entity(1)
+    e2 = Entity(2)
+
+    simulation = Simulation()
+
+    simulation.addEntity(e1)
+    simulation.addEntity(e2)
+
+    # STEP 1
+    utils.writer(simulation.logfile, "a", "\nSTEP 1\n")
+    simulation.translateAndExecute(e1, "SEND 'DHCP DISCOVER' to 3;")
+    simulation.translateAndExecute(e2, "LISTEN 'DHCP DISCOVER' from 1;")
+
 def test_dhcp():
     e1 = Entity(1)
     e2 = Entity(2)

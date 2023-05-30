@@ -48,11 +48,10 @@ def define():
 
 @app.route("/define/simulation", methods=["GET", "POST"])
 def simulation():
-    entities = session.get("entities", [])
-
-    #simulation = testing.test_3entity_communication()
     #testing.test_handshake()
-    testing.test_dhcp()
+    #testing.test_dhcp()
+
+    testing.test_textTranslate()
 
     logfile = createTimestamp()
 
