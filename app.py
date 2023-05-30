@@ -16,12 +16,55 @@ bootstrap = Bootstrap5(app)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    session.pop("descriptions", None)
+    session.pop("log", None)
     if request.method == "POST":
         if request.form.get("start"):
+            session["descriptions"] = [create_triplet("", 1)]
+            session["log"] = "start point log "
+            return redirect(url_for("step"))
+
+        if request.form.get("alt"):
             session["descriptions"] = [create_triplet("", 4)]
             return redirect(url_for("define"))
-        
+
     return render_template("index.html")
+
+
+@app.route("/step", methods=["GET", "POST"])
+def step():
+    if request.method == "POST":
+        if request.form.get("simulate"):
+            session.pop("_flashes", None)
+            commands = []
+            for index in range(len(session.get("descriptions")) * 3):
+                check_begin = "e{}".format(str(index + 1))
+                commands.append(
+                    [v for k, v in request.form.items() if k.startswith(check_begin)]
+                )
+            # commands to be translated into full simulation step execution
+            # descriptions to be blocked if entity is deadlocked in this step
+            # step numbers to be incremented
+            session["log"] = session.get("log") + "\nexecution log content test"
+            return redirect(url_for("step"))
+
+        if request.form.get("add"):
+            session.pop("_flashes", None)
+            descr = list(session.get("descriptions"))
+            descr.append(create_triplet("", 1))
+            session["descriptions"] = descr
+
+        if request.form.get("save"):
+            return redirect(url_for("simulation"))
+
+        if request.form.get("back"):
+            return redirect(url_for("index"))
+
+    return render_template(
+        "step.html",
+        page_descriptions=session.get("descriptions")[1:],
+        first_triplet=session.get("descriptions")[0],
+    )
 
 
 @app.route("/define", methods=["GET", "POST"])
@@ -30,20 +73,28 @@ def define():
         if request.form.get("simulate"):
             session.pop("_flashes", None)
             entities = []
-            for index in range(len(session.get("descriptions"))*3):
-                check_begin = "e{}".format(str(index+1))
-                entities.append([ v for k, v in request.form.items() if k.startswith(check_begin)])
+            for index in range(len(session.get("descriptions")) * 3):
+                check_begin = "e{}".format(str(index + 1))
+                entities.append(
+                    [v for k, v in request.form.items() if k.startswith(check_begin)]
+                )
             session["entities"] = entities
             return redirect(url_for("simulation"))
-        
+
         if request.form.get("add"):
-            session.pop('_flashes', None)
-            session["descriptions"].append(create_triplet("", 4))
-        
+            session.pop("_flashes", None)
+            descr = list(session.get("descriptions"))
+            descr.append(create_triplet("", 4))
+            session["descriptions"] = descr
+
         if request.form.get("back"):
             return redirect(url_for("index"))
-        
-    return render_template("define.html", page_descriptions=session.get("descriptions")[1:], first_triplet=session.get("descriptions")[0])
+
+    return render_template(
+        "define.html",
+        page_descriptions=session.get("descriptions")[1:],
+        first_triplet=session.get("descriptions")[0],
+    )
 
 
 @app.route("/define/simulation", methods=["GET", "POST"])
@@ -53,7 +104,7 @@ def simulation():
     if request.method == "POST":
         if request.form.get("back"):
             return redirect(url_for("index"))
-        
+
     return render_template("simulation.html")
 
 

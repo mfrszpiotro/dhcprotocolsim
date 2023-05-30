@@ -6,17 +6,9 @@
   <div class="rel">
     <p>PROTOCOLISM</p>
   </div>
-  <div class="rel soft-page">
+  <div class="rel soft-page-step">
 
     <div id="carousel" class="carousel-dark carousel slide" data-bs-ride="carousel">
-
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active"></button>
-        {% for index in range(page_descriptions|length) %}
-          <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ index+1 }}"></button>
-        {% endfor %}
-        <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ page_descriptions|length+1 }}"></button>
-      </div>
 
       <div class="col-centered width-in-carousel">
           <div class="carousel-inner">
@@ -79,20 +71,20 @@
             <div class="carousel-item">
               <div class="in-carousel">
                 <div class="flex-container">
-                  <div class="column hidden">
+                  <div class="column hidden pb-2">
                     <h3>Entity #1</h3>
                     {% for index in range(first_triplet[0]|length) %}
                       {{index+1}}:
                       <div class="col-sm"> <input type="text" class="step form-control"></div>
                     {% endfor %}
                   </div>
-                  <div class="column">
+                  <div class="column pb-3">
                     <button type="submit" class="btn btn-primary width-in-carousel button-in-carousel" name="add" value="add">Add more entities</button>
                     {% for index in range(first_triplet[0]|length) %}
                       <div class="col-sm hidden"> <input type="text" class="step form-control"></div>
                     {% endfor %}
                   </div>
-                  <div class="column hidden">
+                  <div class="column hidden pb-3">
                     <h3>Entity #1</h3>
                     {% for index in range(first_triplet[0]|length) %}
                       {{index+1}}:
@@ -108,12 +100,24 @@
 
   </div>
   <div class="buttons-column">
-    <button type="submit" class="btn btn-success width-in-carousel button-in-carousel" name="simulate" value="simulate">Simulate!</button>
+    <button type="submit" class="btn btn-success width-in-carousel button-in-carousel" name="simulate" value="simulate">Simulate step</button>
+  </div>
+  <div class="buttons-column">
+    <button type="submit" class="btn btn-secondary width-in-carousel button-in-carousel" name="save" value="save">Finish and save the results</button>
   </div>
   <div class="buttons-column">
     <button type="submit" class="btn btn-primary width-in-carousel button-in-carousel" name="back" value="back">Back to menu</button>
   </div>
+  <div class="rel soft-page-log">
+    <div class="log-container pt-3">
+      <h3 class="log-title">Log:</h3>
+    </div>
+    <div class="log-container">
+      <textarea class="log">{{ session.get('log')}}</textarea>
+    </div>
+  </div>
 </form>
+
 </div>
 
 <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
