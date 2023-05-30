@@ -13,10 +13,9 @@ def test_dhcp():
     simulation.addEntity(e3)
 
     # STEP 1
-    utils.writer(simulation.logfile, "a", "STEP 1\n")
+    utils.writer(simulation.logfile, "a", "\nSTEP 1\n")
     p11 = Packet(1, 3, "DHCP DISCOVER")
     p12 = Packet(2, 3, "DHCP DISCOVER")
-    simulation.sendMessage(p11)
     simulation.sendMessage(p12)
     simulation.listenMessage(p11, e3)
     # DECIDE ON THE IMPLEMENTATION IN THE LATER STAGE!
@@ -24,7 +23,7 @@ def test_dhcp():
     simulation.checkFinish()
 
     # STEP 2
-    utils.writer(simulation.logfile, "a", "STEP 2\n")
+    utils.writer(simulation.logfile, "a", "\nSTEP 2\n")
     p21 = Packet(3, 1, "DHCP OFFER")
     # REMEMBER THE ONE THAT HAS BEEN LISTENED IN THE STEP BEFORE
     p22 = Packet(3, 2, "DHCP OFFER")
@@ -36,7 +35,7 @@ def test_dhcp():
     simulation.checkFinish()
 
     # STEP 3
-    utils.writer(simulation.logfile, "a", "STEP 3\n")
+    utils.writer(simulation.logfile, "a", "\nSTEP 3\n")
     p31 = Packet(1, 3, "DHCP REQUEST")
     # LOOK COMMENTS ABOVE
     # p32 = Packet(2, 3, "DHCP REQUEST")
@@ -47,18 +46,18 @@ def test_dhcp():
     simulation.checkFinish()
 
     # STEP 4
-    utils.writer(simulation.logfile, "a", "STEP 4\n")
+    utils.writer(simulation.logfile, "a", "\nSTEP 4\n")
     p41 = Packet(3, 1, "DHCP ACKNOWLEDGE")
     # LOOK COMMENTS ABOVE
-    # p42 = Packet(3, 2, "DHCP ACKNOWLEDGE")
+    p42 = Packet(3, 2, "DHCP ACKNOWLEDGE")
     simulation.sendMessage(p41)
-    # simulation.sendMessage(p42)
+    simulation.sendMessage(p42)
     simulation.listenMessage(p41, e1)
-    # simulation.listenMessage(p42, e2)
+    simulation.listenMessage(p42, e2)
     simulation.checkFinish()
 
     # STEP 5
-    utils.writer(simulation.logfile, "a", "STEP 5\n")
+    utils.writer(simulation.logfile, "a", "\nSTEP 5\n")
     utils.writer(simulation.logfile, "a", "ENTITY 1: END")
     # ENTITY 2 END
 
