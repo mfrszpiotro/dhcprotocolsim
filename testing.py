@@ -1,7 +1,10 @@
 from entity import Entity, Packet, Simulation
 import utils
 
-def test_textTranslate():
+def stepWriter(simulation, stepNumber):
+    utils.writer(simulation.logfile, "a", f"\nSTEP {stepNumber}\n")
+
+def test_dummyTextTranslate():
     e1 = Entity(1)
     e2 = Entity(2)
 
@@ -11,9 +14,10 @@ def test_textTranslate():
     simulation.addEntity(e2)
 
     # STEP 1
-    utils.writer(simulation.logfile, "a", "\nSTEP 1\n")
+    stepWriter(simulation, 1)
     simulation.translateAndExecute(e1, "SEND 'DHCP DISCOVER' to 3;")
     simulation.translateAndExecute(e2, "LISTEN 'DHCP DISCOVER' from 1;")
+
 
 def test_dhcp():
     e1 = Entity(1)
