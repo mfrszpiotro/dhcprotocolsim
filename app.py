@@ -36,7 +36,7 @@ def define():
                     [v for k, v in request.form.items() if k.startswith(check_begin)]
                 )
             session["entities"] = entities
-            testing.test_dummyTextTranslate()
+            testing.test_3entityTranslation()
             return redirect(url_for("simulation"))
 
         if request.form.get("add"):
