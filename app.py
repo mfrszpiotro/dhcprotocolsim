@@ -20,7 +20,7 @@ def index():
         if request.form.get("start"):
             session["descriptions"] = [create_triplet("", 4)]
             return redirect(url_for("define"))
-        
+
     return render_template("index.html")
 
 
@@ -30,39 +30,35 @@ def define():
         if request.form.get("simulate"):
             session.pop("_flashes", None)
             entities = []
-            for index in range(len(session.get("descriptions"))*3):
-                check_begin = "e{}".format(str(index+1))
-                entities.append([ v for k, v in request.form.items() if k.startswith(check_begin)])
+            for index in range(len(session.get("descriptions")) * 3):
+                check_begin = "e{}".format(str(index + 1))
+                entities.append(
+                    [v for k, v in request.form.items() if k.startswith(check_begin)]
+                )
             session["entities"] = entities
+            testing.test_dummyTextTranslate()
             return redirect(url_for("simulation"))
-        
+
         if request.form.get("add"):
-            session.pop('_flashes', None)
+            session.pop("_flashes", None)
             session["descriptions"].append(create_triplet("", 4))
-        
+
         if request.form.get("back"):
             return redirect(url_for("index"))
-        
-    return render_template("define.html", page_descriptions=session.get("descriptions")[1:], first_triplet=session.get("descriptions")[0])
+
+    return render_template(
+        "define.html",
+        page_descriptions=session.get("descriptions")[1:],
+        first_triplet=session.get("descriptions")[0],
+    )
 
 
 @app.route("/define/simulation", methods=["GET", "POST"])
 def simulation():
-    #testing.test_handshake()
-    #testing.test_dhcp()
-
-    testing.test_dummyTextTranslate()
-
-    logfile = createTimestamp()
-
-    with open(logfile, "r") as file:
-        output = file.read()
-
-    flash(output, "success")
     if request.method == "POST":
         if request.form.get("back"):
             return redirect(url_for("index"))
-        
+
     return render_template("simulation.html")
 
 

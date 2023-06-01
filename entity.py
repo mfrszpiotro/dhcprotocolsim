@@ -37,7 +37,7 @@ class Simulation:
             utils.writer(self.logfile, "a", log)
 
             for entity in self.entities:
-                if entity.name == packet.destination:
+                if str(entity.name) == packet.destination:
                     try:
                         entity.queue.append(packet)
                         utils.writer(self.logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
