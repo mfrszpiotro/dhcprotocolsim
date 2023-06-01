@@ -51,8 +51,7 @@ def simulation():
     #testing.test_handshake()
     #testing.test_dhcp()
 
-    #testing.test_dummyTextTranslate()
-    testing.test_basicSimulatedTranslation()
+    testing.test_dummyTextTranslate()
 
     logfile = createTimestamp()
 

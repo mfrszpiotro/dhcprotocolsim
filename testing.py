@@ -4,25 +4,6 @@ import utils
 def stepWriter(simulation, stepNumber):
     utils.writer(simulation.logfile, "a", f"\nSTEP {stepNumber}\n")
 
-def test_basicSimulatedTranslation():
-    e1 = Entity(1)
-    e2 = Entity(2)
-
-    simulation = Simulation()
-
-    simulation.addEntity(e1)
-    simulation.addEntity(e2)
-
-    # STEP 1
-    stepWriter(simulation, 1)
-    commandsPerStep = [
-            ["SEND 'u there?' to 2;", "LISTEN 'u there?' from 1;"], #STEP 1
-            ["LISTEN 'sure' from 2;", "SEND 'sure' to 1;"] #STEP 2
-    ]
-
-    simulation.executeSimulation(commandsPerStep)
-
-
 def test_dummyTextTranslate():
     e1 = Entity(1)
     e2 = Entity(2)
@@ -34,11 +15,6 @@ def test_dummyTextTranslate():
 
     # STEP 1
     stepWriter(simulation, 1)
-    simulation.translateAndExecute(e1, "SEND 'DHCP DISCOVER' to 2;")
-    simulation.translateAndExecute(e2, "LISTEN 'DHCP DISCOVER' from 1;")
-    
-    # STEP 2
-    stepWriter(simulation, 2)
     simulation.translateAndExecute(e1, "SEND 'DHCP DISCOVER' to 3;")
     simulation.translateAndExecute(e2, "LISTEN 'DHCP DISCOVER' from 1;")
 
