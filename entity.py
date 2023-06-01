@@ -29,6 +29,9 @@ class Simulation:
                 return entity
         return None
 
+    def checkFinish(self):
+        self.entites = [entity for entity in self.entities if not entity.halted]
+
     def sendMessage(self, packet):
         sender = self.getEntity(packet.source)
 
@@ -58,9 +61,6 @@ class Simulation:
                 except Exception as e:
                     print(f"Message could not be received! {str(e)}\n")
 
-    def checkFinish(self):
-        self.entites = [entity for entity in self.entities if not entity.halted]
-
     def translateAndExecute(self, actor, command):
         parts = command.split()
         action = parts[0].upper()
@@ -77,4 +77,23 @@ class Simulation:
         elif action == 'LISTEN':
             packet = Packet(target, actor.name, message)
             self.listenMessage(packet, actor)
+
+#    def executeSimulation(self, commandsByStep):
+#        for stepCommands in commandsByStep:
+#            for entity in self.entities:
+#                for command in stepCommands:
+#                    if command.startswith("SEND"):
+#                        self.translateAndExecute(entity, command)
+#
+#            for entity in self.entities:
+#                for command in stepCommands:
+#                    if not command.startswith("SEND"):
+#                        self.translateAndExecute(entity, command)
+
+    def executeSimulation(self, commandsPerStep):
+        for step, commands in enumerate(commandsPerStep, start=1):
+            stepWriter(self, step)
+            for entity, command in zip(self.entities, commands):
+                if command:
+                    self.translateAndExecute(entity, command)
 
