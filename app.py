@@ -22,6 +22,7 @@ def index():
         if request.form.get("start"):
             session["descriptions"] = [create_triplet("", 1)]
             session["log"] = "start point log "
+            session["step_number"] = 1
             return redirect(url_for("step"))
 
         if request.form.get("alt"):
@@ -33,19 +34,19 @@ def index():
 
 @app.route("/step", methods=["GET", "POST"])
 def step():
+    step_number = session.get("step_number")
     if request.method == "POST":
         if request.form.get("simulate"):
             session.pop("_flashes", None)
-            commands = []
-            for index in range(len(session.get("descriptions")) * 3):
-                check_begin = "e{}".format(str(index + 1))
-                commands.append(
-                    [v for k, v in request.form.items() if k.startswith(check_begin)]
-                )
+            commands = [v for k, v in request.form.items() if k.startswith("e") and k.endswith(str(step_number))]
             # commands to be translated into full simulation step execution
+            wasSimulated = True
             # descriptions to be blocked if entity is deadlocked in this step
-            # step numbers to be incremented
-            session["log"] = session.get("log") + "\nexecution log content test"
+            if commands and wasSimulated:
+                session["step_number"] = step_number+1
+                # data based on the output from the simulation:
+                session["log"] = session.get("log") + "\n" + str(commands)
+                # session["blocked"] = 
             return redirect(url_for("step"))
 
         if request.form.get("add"):
@@ -64,6 +65,7 @@ def step():
         "step.html",
         page_descriptions=session.get("descriptions")[1:],
         first_triplet=session.get("descriptions")[0],
+        step_number=step_number
     )
 
 
