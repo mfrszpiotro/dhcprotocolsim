@@ -52,9 +52,10 @@ class Simulation:
 
             if entity.queue:
                 try:
-                    packet = entity.queue.pop(0)
-                    log = f"'{packet.message}' has been saved in ENTITY {packet.destination} queue;\n"
-                    entity.halted = False
+                    if entity.queue(0).message == packet.message:
+                        packet = entity.queue.pop(0)
+                        log = f"'{packet.message}' has been saved in ENTITY {packet.destination} queue;\n"
+                        entity.halted = False
                 except Exception as e:
                     print(f"Message could not be received! {str(e)}\n")
 
