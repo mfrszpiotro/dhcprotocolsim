@@ -61,6 +61,14 @@ class Simulation:
     def checkFinish(self):
         self.entites = [entity for entity in self.entities if not entity.halted]
 
+    def terminateEntity(self, entity_name):
+        entity = self.getEntity(entity_name)
+        if entity:
+            entity.halted = True
+            utils.writer(self.logfile, "a", f"Entity {entity_name} END;\n")
+        else:
+            print(f"Entity {entity_name} not found!\n")
+
     def translateAndExecute(self, actor, command):
         parts = command.split()
         action = parts[0].upper()

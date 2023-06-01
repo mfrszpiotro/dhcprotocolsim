@@ -47,7 +47,9 @@ def test_3entityTranslation():
 
     # STEP 5
     stepWriter(simulation, 5)
-    simulation.checkFinish()
+    simulation.terminateEntity(1)
+    simulation.terminateEntity(2)
+    simulation.terminateEntity(3)
 
 def test_2entityTranslation():
     e1 = Entity(1)
