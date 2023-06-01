@@ -23,6 +23,7 @@ def index():
             session["descriptions"] = [create_triplet("", 1)]
             session["log"] = "start point log "
             session["step_number"] = 1
+            session["blocked"] = []
             return redirect(url_for("step"))
 
         if request.form.get("alt"):
@@ -35,6 +36,7 @@ def index():
 @app.route("/step", methods=["GET", "POST"])
 def step():
     step_number = session.get("step_number")
+    blocked = session.get("blocked")
     if request.method == "POST":
         if request.form.get("simulate"):
             session.pop("_flashes", None)
@@ -46,7 +48,7 @@ def step():
                 session["step_number"] = step_number+1
                 # data based on the output from the simulation:
                 session["log"] = session.get("log") + "\n" + str(commands)
-                # session["blocked"] = 
+                session["blocked"] = [2]
             return redirect(url_for("step"))
 
         if request.form.get("add"):
@@ -65,7 +67,8 @@ def step():
         "step.html",
         page_descriptions=session.get("descriptions")[1:],
         first_triplet=session.get("descriptions")[0],
-        step_number=step_number
+        step_number=step_number,
+        blocked=blocked
     )
 
 
@@ -101,8 +104,9 @@ def define():
 
 @app.route("/define/simulation", methods=["GET", "POST"])
 def simulation():
-    entities = session.get("entities", [])
-    flash(entities, "success")
+    log = session.get("log", None)
+    if log:
+        flash(log, "success")
     if request.method == "POST":
         if request.form.get("back"):
             return redirect(url_for("index"))
