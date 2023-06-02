@@ -1,5 +1,5 @@
 from flask import current_app
-import utils
+import utils, copy
 
 class Entity:
     def __init__(self, name, max_queue_length=1):
@@ -35,7 +35,7 @@ class Simulation:
 
         if not sender.halted:
             log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
-            confirm = f"Message '{packet.message}' could not be sent to {packet.destination}!"
+            confirm = f"Message '{packet.message}' could not be sent to {packet.destination}!\n"
             utils.writer(self.logfile, "a", log)
 
             for entity in self.entities:
@@ -43,23 +43,24 @@ class Simulation:
                     entity.queue.append(packet)
                     confirm = f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n"
                     utils.writer(self.logfile, "a", confirm)
+                    break
 
-            return log + '\n' + confirm
+            return log + confirm
 
     def listenMessage(self, packet, entity):
         if not entity.halted:
             entity.halted = True
             log = f"ENTITY {packet.destination}: LISTEN '{packet.message}' FROM {packet.source};\n"
-            confirm = f"Message could not be received!"
+            confirm = f"Message could not be found in queue!\n"
             utils.writer(self.logfile, "a", log)
 
             if entity.queue:
-               if entity.queue(0).message == packet.message:
+               if entity.queue[0].message == packet.message:
                    packet = entity.queue.pop(0)
-                   confirm = f"'{packet.message}' has been obtained by ENTITY {packet.destination} queue;\n"
+                   confirm = f"'{packet.message}' has been read from queue by ENTITY {packet.destination};\n"
                    entity.halted = False
 
-            return log + "\n" + confirm
+            return log + confirm
 
     def checkFinish(self):
         self.entites = [entity for entity in self.entities if not entity.halted]
@@ -83,31 +84,29 @@ class Simulation:
             return ""
 
         if action == 'SEND':
-            packet = Packet(actor_name, target, message)
-            return self.sendMessage(packet)
+            return self.sendMessage(Packet(actor_name, target, message))
         elif action == 'LISTEN':
-            packet = Packet(target, actor_name, message)
-            return self.listenMessage(packet, self.getEntity(actor_name))
+            return self.listenMessage(Packet(target, actor_name, message), self.getEntity(actor_name))
 
 
     # First we execute SEND actions, since it is required 
     # for the proper functionality of our program
     def simulateStep(self, entity_steps):
         executedLog = ""
-
         for index in range(len(entity_steps)):
-            print(index)
-            current = entity_steps[index]
-            if current.startswith("SEND"):
-                executedLog = executedLog + str(self.translateAndExecute(self.getEntity(index+1), current))
-                entity_steps.pop(index)
+            entity_steps[index] = (index, entity_steps[index])
 
+        listen_steps = copy.copy(entity_steps)
         for index in range(len(entity_steps)):
             current = entity_steps[index]
-            if current.startswith("LISTEN"):
-                executedLog = executedLog + str(self.translateAndExecute(self.getEntity(index+1), current))
-                entity_steps.pop(index)
-        
+            if current[1].startswith("SEND"):
+                executedLog = executedLog + str(self.translateAndExecute(current[0]+1, current[1]))
+                listen_steps.remove(current)
+
+        for step in listen_steps:
+            if step[1].startswith("LISTEN"):
+                executedLog = executedLog + str(self.translateAndExecute(step[0]+1, step[1]))
+
         haltedList = []
         for entity in self.entities:
             if entity.halted:

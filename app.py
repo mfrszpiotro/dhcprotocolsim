@@ -41,15 +41,14 @@ def step():
         if request.form.get("simulate"):
             session.pop("_flashes", None)
             commands = [v for k, v in request.form.items() if k.startswith("e") and k.endswith(str(step_number))]
-            flash(str(testing.test_stepByStep(commands)), "success")
             # commands to be translated into full simulation step execution
-            wasSimulated = True
+            simulation_result = testing.test_stepByStep(commands)
             # descriptions to be blocked if entity is deadlocked in this step
-            if commands and wasSimulated:
+            if commands and simulation_result:
                 session["step_number"] = step_number+1
                 # data based on the output from the simulation:
-                session["log"] = session.get("log") + "\n" + str(commands)
-                session["blocked"] = [2]
+                session["log"] = session.get("log") + "\n" + simulation_result[0]
+                session["blocked"] = simulation_result[1]
             return redirect(url_for("step"))
 
         if request.form.get("add"):
