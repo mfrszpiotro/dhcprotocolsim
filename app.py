@@ -41,6 +41,7 @@ def step():
         if request.form.get("simulate"):
             session.pop("_flashes", None)
             commands = [v for k, v in request.form.items() if k.startswith("e") and k.endswith(str(step_number))]
+            flash(str(testing.test_stepByStep(commands)), "success")
             # commands to be translated into full simulation step execution
             wasSimulated = True
             # descriptions to be blocked if entity is deadlocked in this step

@@ -1,3 +1,4 @@
+from flask import current_app
 import utils
 
 class Entity:
@@ -25,7 +26,7 @@ class Simulation:
 
     def getEntity(self, target):
         for entity in self.entities:
-            if entity.name == target:
+            if str(entity.name) == str(target):
                 return entity
         return None
 
@@ -34,30 +35,31 @@ class Simulation:
 
         if not sender.halted:
             log = f"ENTITY {packet.source}: SEND '{packet.message}' TO {packet.destination};\n"
+            confirm = f"Message '{packet.message}' could not be sent to {packet.destination}!"
             utils.writer(self.logfile, "a", log)
 
             for entity in self.entities:
                 if str(entity.name) == packet.destination:
-                    try:
-                        entity.queue.append(packet)
-                        utils.writer(self.logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
-                    except Exception as e:
-                        print(f"Message could not be sent! {str(e)}")
+                    entity.queue.append(packet)
+                    confirm = f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n"
+                    utils.writer(self.logfile, "a", confirm)
+
+            return log + '\n' + confirm
 
     def listenMessage(self, packet, entity):
         if not entity.halted:
             entity.halted = True
             log = f"ENTITY {packet.destination}: LISTEN '{packet.message}' FROM {packet.source};\n"
+            confirm = f"Message could not be received!"
             utils.writer(self.logfile, "a", log)
 
             if entity.queue:
-                try:
-                    if entity.queue(0).message == packet.message:
-                        packet = entity.queue.pop(0)
-                        log = f"'{packet.message}' has been saved in ENTITY {packet.destination} queue;\n"
-                        entity.halted = False
-                except Exception as e:
-                    print(f"Message could not be received! {str(e)}\n")
+               if entity.queue(0).message == packet.message:
+                   packet = entity.queue.pop(0)
+                   confirm = f"'{packet.message}' has been obtained by ENTITY {packet.destination} queue;\n"
+                   entity.halted = False
+
+            return log + "\n" + confirm
 
     def checkFinish(self):
         self.entites = [entity for entity in self.entities if not entity.halted]
@@ -70,20 +72,46 @@ class Simulation:
         else:
             print(f"Entity {entity_name} not found!\n")
 
-    def translateAndExecute(self, actor, command):
+    def translateAndExecute(self, actor_name, command):
         parts = command.split()
         action = parts[0].upper()
         message = ' '.join(parts[1:-2])
         target = parts[-1][:-1]
 
-        if not self.getEntity(actor.name):
-            print(f"Entity {actor.name} not found!\n")
-            return
+        if not self.getEntity(actor_name):
+            print(f"Entity {actor_name} not found!\n")
+            return ""
 
         if action == 'SEND':
-            packet = Packet(actor.name, target, message)
-            self.sendMessage(packet)
+            packet = Packet(actor_name, target, message)
+            return self.sendMessage(packet)
         elif action == 'LISTEN':
-            packet = Packet(target, actor.name, message)
-            self.listenMessage(packet, actor)
+            packet = Packet(target, actor_name, message)
+            return self.listenMessage(packet, self.getEntity(actor_name))
+
+
+    # First we execute SEND actions, since it is required 
+    # for the proper functionality of our program
+    def simulateStep(self, entity_steps):
+        executedLog = ""
+
+        for index in range(len(entity_steps)):
+            print(index)
+            current = entity_steps[index]
+            if current.startswith("SEND"):
+                executedLog = executedLog + str(self.translateAndExecute(self.getEntity(index+1), current))
+                entity_steps.pop(index)
+
+        for index in range(len(entity_steps)):
+            current = entity_steps[index]
+            if current.startswith("LISTEN"):
+                executedLog = executedLog + str(self.translateAndExecute(self.getEntity(index+1), current))
+                entity_steps.pop(index)
+        
+        haltedList = []
+        for entity in self.entities:
+            if entity.halted:
+                haltedList.append(entity.name)
+
+        return executedLog, haltedList
 
