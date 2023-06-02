@@ -1,19 +1,32 @@
 from entity import Entity, Packet, Simulation
-import utils
+import utils, json
 
 def stepWriter(simulation, stepNumber):
     utils.writer(simulation.logfile, "a", f"\nSTEP {stepNumber}\n")
 
-def test_stepByStep(stepList):
-    e1 = Entity(1)
-    e2 = Entity(2)
-    e3 = Entity(3)
+def test_serialized_class():
+    # Create an instance of the Entity class
+    entity = Entity('Example Entity', 5)
 
+    # Serialize the entity into JSON
+    json_data = json.dumps(entity, cls=Entity.Encoder)
+
+    # Print the serialized JSON data
+    print(json_data)
+
+    # Deserialize the JSON data back into an instance of the Entity class
+    deserialized_entity = json.loads(json_data, object_hook=Entity.decoder)
+
+    # Access the attributes of the deserialized entity
+    print(deserialized_entity.name)
+    print(deserialized_entity.queue)
+    print(deserialized_entity.max_queue_length)
+    print(deserialized_entity.halted)
+
+def test_stepByStep(stepList, entities):
     simulation = Simulation()
-
-    simulation.addEntity(e1)
-    simulation.addEntity(e2)
-    simulation.addEntity(e3)
+    for e in entities:
+        simulation.addEntity(e)
 
     return simulation.simulateStep(stepList)
 

@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap5
 
 from entity import Entity
 from utils import create_triplet, createTimestamp, writer
-import testing
+import testing, json
 
 # create the app
 app = Flask(__name__)
@@ -40,13 +40,30 @@ def step():
     if request.method == "POST":
         if request.form.get("simulate"):
             session.pop("_flashes", None)
-            commands = [v for k, v in request.form.items() if k.startswith("e") and k.endswith(str(step_number))]
-            # commands to be translated into full simulation step execution
-            simulation_result = testing.test_stepByStep(commands)
-            # descriptions to be blocked if entity is deadlocked in this step
+            commands = [
+                v
+                for k, v in request.form.items()
+                if k.startswith("e") and k.endswith(str(step_number))
+            ]
+            entities = []
+            if step_number == 1:
+                for index in range(len(commands)):
+                    entities.append(Entity(index + 1))
+            else:
+                for serialized_entity in session["entities"]:
+                    entities.append(
+                        json.loads(serialized_entity, object_hook=Entity.decoder)
+                    )
+
+            simulation_result = testing.test_stepByStep(commands, entities)
+
             if commands and simulation_result:
-                session["step_number"] = step_number+1
-                # data based on the output from the simulation:
+                serialized_entities = []
+                for entity in simulation_result[2]:
+                    serialized_entities.append(json.dumps(entity, cls=Entity.Encoder))
+                session["entities"] = serialized_entities
+
+                session["step_number"] = step_number + 1
                 session["log"] = session.get("log") + "\n" + simulation_result[0]
                 session["blocked"] = simulation_result[1]
             return redirect(url_for("step"))
@@ -68,7 +85,7 @@ def step():
         page_descriptions=session.get("descriptions")[1:],
         first_triplet=session.get("descriptions")[0],
         step_number=step_number,
-        blocked=blocked
+        blocked=blocked,
     )
 
 
