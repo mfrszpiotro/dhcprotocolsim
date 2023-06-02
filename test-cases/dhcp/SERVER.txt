@@ -1,0 +1,7 @@
+LISTEN ’DHCP DISCOVERY’ from *;
+SEND ’DHCP OFFER’ to Q; 
+LISTEN ’DHCP REQUEST’ from Q; 
+SEND ’DHCP ACKNOLEDGE’ to Q;
+
+Q - numer entity z pierwszego rekordu zapisanego w kolejce klasy entity (żeby obsłużyć wiecej niż jedno entity)
+Q - numer entity from the first record saved in the entity's queue

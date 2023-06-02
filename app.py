@@ -2,8 +2,8 @@ from flask import Flask, flash, redirect, render_template, url_for, request, ses
 from flask_bootstrap import Bootstrap5
 
 from entity import Entity
-from forms import LoginForm
-from utils import create_triplet
+from utils import create_triplet, createTimestamp, writer
+import testing
 
 # create the app
 app = Flask(__name__)
@@ -84,6 +84,7 @@ def define():
                     [v for k, v in request.form.items() if k.startswith(check_begin)]
                 )
             session["entities"] = entities
+            testing.test_3entityTranslation()
             return redirect(url_for("simulation"))
 
         if request.form.get("add"):
@@ -107,6 +108,7 @@ def simulation():
     log = session.get("log", None)
     if log:
         flash(log, "success")
+
     if request.method == "POST":
         if request.form.get("back"):
             return redirect(url_for("index"))

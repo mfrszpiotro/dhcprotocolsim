@@ -1,10 +1,9 @@
-SERVER ENTITY DHCP
-0:
-	LISTEN ’ DHCP DISCOVERY’ from * ;
 1:
-	SEND ’ DHCP OFFER’ to Q; 
+	LISTEN ’ DHCP DISCOVERY’ from * ;
 2:
-	LISTEN ’ DHCP REQUEST’ from Q; 
+	SEND ’ DHCP OFFER’ to Q; 
 3:
+	LISTEN ’ DHCP REQUEST’ from Q; 
+4:
 	SEND ’ DHCP ACKNOLEDGE’ to Q;
 Q - numer entity z pierwszego rekordu zapisanego w kolejce klasy entity (żeby obsłużyć wiecej niż jedno entity)
