@@ -37,7 +37,7 @@ class Simulation:
             utils.writer(self.logfile, "a", log)
 
             for entity in self.entities:
-                if entity.name == packet.destination:
+                if str(entity.name) == packet.destination:
                     try:
                         entity.queue.append(packet)
                         utils.writer(self.logfile, "a", f"'{packet.message}' has been saved in ENTITY '{packet.destination}' queue;\n")
@@ -52,12 +52,38 @@ class Simulation:
 
             if entity.queue:
                 try:
-                    packet = entity.queue.pop(0)
-                    log = f"'{packet.message}' has been saved in ENTITY {packet.destination} queue;\n"
-                    entity.halted = False
+                    if entity.queue(0).message == packet.message:
+                        packet = entity.queue.pop(0)
+                        log = f"'{packet.message}' has been saved in ENTITY {packet.destination} queue;\n"
+                        entity.halted = False
                 except Exception as e:
                     print(f"Message could not be received! {str(e)}\n")
 
     def checkFinish(self):
         self.entites = [entity for entity in self.entities if not entity.halted]
+
+    def terminateEntity(self, entity_name):
+        entity = self.getEntity(entity_name)
+        if entity:
+            entity.halted = True
+            utils.writer(self.logfile, "a", f"Entity {entity_name} END;\n")
+        else:
+            print(f"Entity {entity_name} not found!\n")
+
+    def translateAndExecute(self, actor, command):
+        parts = command.split()
+        action = parts[0].upper()
+        message = ' '.join(parts[1:-2])
+        target = parts[-1][:-1]
+
+        if not self.getEntity(actor.name):
+            print(f"Entity {actor.name} not found!\n")
+            return
+
+        if action == 'SEND':
+            packet = Packet(actor.name, target, message)
+            self.sendMessage(packet)
+        elif action == 'LISTEN':
+            packet = Packet(target, actor.name, message)
+            self.listenMessage(packet, actor)
 
