@@ -14,18 +14,13 @@
     border-color: white !important;
 }
 
-.slider-abs{
-    position: absolute;
-    width: 90%;
-  }
-
 #slide{
     transition: top 0.4s ease-in-out;
     -o-transition: top 0.4s ease-in-out;
     -ms-transition: top 0.4s ease-in-out;
     -moz-transition: top 0.4s ease-in-out;
     -webkit-transition: top 0.4s ease-in-out;
-    width: 100%;
+    width: 90%;
     height: 100%;
     z-index: 997;
     top:90%;

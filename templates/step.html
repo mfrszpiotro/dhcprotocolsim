@@ -4,10 +4,11 @@
 
 <div id="slide">
   <div class="slider-abs pt-1">
+    <div class="log-container">
+      <h3 class="log-title">Simulation log:</h3>
+    </div>
     <div class="rel">
-      <div class="log-container">
-        <h3 class="log-title">Log:</h3>
-      </div>
+
       <div class="log-container">
         <textarea class="log" rows="10" disabled>{{ session.get('log')}}</textarea>
       </div>
@@ -117,7 +118,7 @@
 
   </div>
   <div class="buttons-column">
-    <button type="submit" class="btn btn-success width-in-carousel button-in-carousel" name="simulate" value="simulate">Simulate step</button>
+    <button type="submit" class="btn btn-success width-in-carousel button-in-carousel" name="simulate" value="simulate">Simulate step {{step_number}}</button>
   </div>
   <div class="buttons-column">
     <button type="submit" class="btn btn-secondary width-in-carousel button-in-carousel" name="save" value="save">Finish and save the results</button>
