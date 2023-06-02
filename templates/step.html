@@ -1,0 +1,140 @@
+{% extends 'appbase.html' %}
+
+{% block content %}
+
+<div id="slide">
+  <div class="slider-abs pt-1">
+    <div class="log-container">
+      <h3 class="log-title">Simulation log:</h3>
+    </div>
+    <div class="rel">
+
+      <div class="log-container">
+        <textarea class="log" rows="10" disabled>{{ session.get('log')}}</textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="abs">
+  <form method="post">
+  <div class="rel">
+    <p>PROTOCOLISM</p>
+  </div>
+
+  <div class="rel soft-page-step">
+
+    <div id="carousel" class="carousel-dark carousel slide" data-bs-ride="carousel">
+
+      <div class="col-centered width-in-carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="in-carousel">
+                <div class="flex-container">
+                  <div class="column">
+                    <h3>Entity #1</h3>
+                    {% for index in range(first_triplet[0]|length) %}
+                      {{step_number}}:
+                      <div class="col-sm"> <input type="text" class="step form-control" name="e1r{{step_number}}" value="{{first_triplet[0][0]}}" {% if 1 in blocked %} hidden {% endif %}></div>
+                    {% endfor %}
+                  </div>
+                  <div class="column">
+                    <h3>Entity #2</h3>
+                    {% for index in range(first_triplet[1]|length) %}
+                      {{step_number}}:
+                      <div class="col-sm"> <input type="text" class="step form-control" name="e2r{{step_number}}" value="{{first_triplet[1][0]}}" {% if 2 in blocked %} hidden {% endif %}></div>
+                    {% endfor %}
+                  </div>
+                  <div class="column">
+                    <h3>Entity #3</h3>
+                    {% for index in range(first_triplet[2]|length) %}
+                      {{step_number}}:
+                      <div class="col-sm"> <input type="text" class="step form-control" name="e3r{{step_number}}" value="{{first_triplet[2][0]}}" {% if 3 in blocked %} hidden {% endif %}></div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% for triplet in page_descriptions %}
+              <div class="carousel-item">
+                <div class="in-carousel">
+                  <div class="flex-container">
+                    <div class="column">
+                      <h3>Entity #{{ loop.index*3+1 }}</h3>
+                      {% for index in range(triplet[0]|length) %}
+                        {{step_number}}:
+                        <div class="col-sm"> <input type="text" class="step form-control" name="e{{ loop.index*3+1 }}r{{step_number}}" value="{{triplet[0][0]}}" {% if 1 in blocked %} {{ loop.index*3+1 }} {% endif %}></div>
+                      {% endfor %}
+                    </div>
+                    <div class="column">
+                      <h3>Entity #{{ loop.index*3+2 }}</h3>
+                      {% for index in range(triplet[1]|length) %}
+                        {{step_number}}:
+                        <div class="col-sm"> <input type="text" class="step form-control" name="e{{ loop.index*3+2 }}r{{step_number}}" value="{{triplet[1][0]}}" {% if 1 in blocked %} {{ loop.index*3+2 }} {% endif %}></div>
+                      {% endfor %}
+                    </div>
+                    <div class="column">
+                      <h3>Entity #{{ loop.index*3+3 }}</h3>
+                      {% for index in range(triplet[2]|length) %}
+                        {{step_number}}:
+                        <div class="col-sm"><input type="text" class="step form-control" name="e{{ loop.index*3+3 }}r{{step_number}}" value="{{triplet[2][0]}}" {% if 1 in blocked %} {{ loop.index*3+3 }} {% endif %}></div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+            {% if step_number == 1 %}
+              <div class="carousel-item">
+                <div class="in-carousel">
+                  <div class="flex-container">
+                    <div class="column hidden pb-2">
+                      <h3>Entity #1</h3>
+                      {% for index in range(first_triplet[0]|length) %}
+                        {{step_number}}:
+                        <div class="col-sm"> <input type="text" class="step form-control"></div>
+                      {% endfor %}
+                    </div>
+                    <div class="column pb-3">
+                      <button type="submit" class="btn btn-primary width-in-carousel button-in-carousel" name="add" value="add">Add more entities</button>
+                      {% for index in range(first_triplet[0]|length) %}
+                        <div class="col-sm hidden"> <input type="text" class="step form-control"></div>
+                      {% endfor %}
+                    </div>
+                    <div class="column hidden pb-3">
+                      <h3>Entity #1</h3>
+                      {% for index in range(first_triplet[0]|length) %}
+                        {{step_number}}:
+                        <div class="col-sm"> <input type="text" class="step form-control"></div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div> 
+      </div>
+    </div>
+
+  </div>
+  <div class="buttons-column">
+    <button type="submit" class="btn btn-success width-in-carousel button-in-carousel" name="simulate" value="simulate">Simulate step {{step_number}}</button>
+  </div>
+  <div class="buttons-column">
+    <button type="submit" class="btn btn-secondary width-in-carousel button-in-carousel" name="save" value="save">Finish and save the results</button>
+  </div>
+  <div class="buttons-column">
+    <button type="submit" class="btn btn-primary width-in-carousel button-in-carousel" name="back" value="back">Back to menu</button>
+  </div>
+</form>
+
+</div>
+
+<button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+  <span class="carousel-control-prev-icon"></span>
+</button>
+<button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+  <span class="carousel-control-next-icon"></span>
+</button>
+
+{% endblock %}
