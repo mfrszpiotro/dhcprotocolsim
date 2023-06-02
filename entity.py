@@ -106,11 +106,10 @@ class Simulation:
         self.entites = [entity for entity in self.entities if not entity.halted]
 
     def terminateEntity(self, entity):
-        if not entity.halted:
-            confirm = f"ENTITY {entity.name}: END;\n"
-            entity.halted = True
-            utils.writer(self.logfile, "a", confirm)
-            return confirm
+        confirm = f"ENTITY {entity.name}: END;\n"
+        entity.halted = True
+        utils.writer(self.logfile, "a", confirm)
+        return confirm
 
     def translateAndExecute(self, actor_name, command):
         entity = self.getEntity(actor_name)
