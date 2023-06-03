@@ -115,7 +115,7 @@ def automatic():
                 for index in range(num_ent):
                     string_builder = str(random.choice(options_actions))
                     if string_builder.startswith(("SEND", "LISTEN")):
-                        string_builder = string_builder + str(random.choice(options_dest))
+                        string_builder = string_builder + str(random.choice(options_dest)) + ';'
                     commands.append(string_builder+'\n')
 
                 simulation_result = testing.test_stepByStep(commands, entities)
