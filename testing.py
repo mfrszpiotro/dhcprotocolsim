@@ -1,9 +1,34 @@
 from entity import Entity, Packet, Simulation
-import utils
-
+import utils, json
 
 def stepWriter(simulation, stepNumber):
     utils.writer(simulation.logfile, "a", f"\nSTEP {stepNumber}\n")
+
+def test_serialized_class():
+    # Create an instance of the Entity class
+    entity = Entity('Example Entity', 5)
+
+    # Serialize the entity into JSON
+    json_data = json.dumps(entity, cls=Entity.Encoder)
+
+    # Print the serialized JSON data
+    print(json_data)
+
+    # Deserialize the JSON data back into an instance of the Entity class
+    deserialized_entity = json.loads(json_data, object_hook=Entity.decoder)
+
+    # Access the attributes of the deserialized entity
+    print(deserialized_entity.name)
+    print(deserialized_entity.queue)
+    print(deserialized_entity.max_queue_length)
+    print(deserialized_entity.halted)
+
+def test_stepByStep(stepList, entities):
+    simulation = Simulation()
+    for e in entities:
+        simulation.addEntity(e)
+
+    return simulation.simulateStep(stepList)
 
 def test_3entityTranslation():
     e1 = Entity(1)
@@ -19,30 +44,30 @@ def test_3entityTranslation():
     # FOR THIS EXAMPLE I ASSUMED THAT ONLY E1 IS SERVED!
     # STEP 1
     stepWriter(simulation, 1)
-    simulation.translateAndExecute(e1, "SEND 'DHCP DISCOVER' to 3;")
-    simulation.translateAndExecute(e2, "SEND 'DHCP DISCOVER' to 3;")
-    simulation.translateAndExecute(e3, "LISTEN ’DHCP DISCOVERY’ from 1;")
+    simulation.translateAndExecute("1", "SEND 'DHCP DISCOVER' to 3;")
+    simulation.translateAndExecute("2", "SEND 'DHCP DISCOVER' to 3;")
+    simulation.translateAndExecute("3", "LISTEN ’DHCP DISCOVERY’ from 1;")
     simulation.checkFinish()
 
     # STEP 2
     stepWriter(simulation, 2)
-    simulation.translateAndExecute(e3, "SEND 'DHCP OFFER' to 1;")
-    simulation.translateAndExecute(e1, "LISTEN ’DHCP OFFER’ from 3;")
-    simulation.translateAndExecute(e2, "LISTEN ’DHCP OFFER’ from 3;")
+    simulation.translateAndExecute("3", "SEND 'DHCP OFFER' to 1;")
+    simulation.translateAndExecute("1", "LISTEN ’DHCP OFFER’ from 3;")
+    simulation.translateAndExecute("2", "LISTEN ’DHCP OFFER’ from 3;")
     simulation.checkFinish()
     
     # STEP 3
     stepWriter(simulation, 3)
-    simulation.translateAndExecute(e1,"SEND ’DHCP REQUEST’ to 3;")
-    simulation.translateAndExecute(e2,"SEND ’DHCP REQUEST’ to 3;")
-    simulation.translateAndExecute(e3, "LISTEN ’DHCP REQUEST’ from 1;")
+    simulation.translateAndExecute("1","SEND ’DHCP REQUEST’ to 3;")
+    simulation.translateAndExecute("2","SEND ’DHCP REQUEST’ to 3;")
+    simulation.translateAndExecute("3", "LISTEN ’DHCP REQUEST’ from 1;")
     simulation.checkFinish()
     
     # STEP 4
     stepWriter(simulation, 4)
-    simulation.translateAndExecute(e3,"SEND ’DHCP ACKNOWLEDGE’ to 1;")
-    simulation.translateAndExecute(e1, "LISTEN ’DHCP ACKNOWLEDGE’ from 3;")
-    simulation.translateAndExecute(e2, "LISTEN ’DHCP ACKNOWLEDGE’ from 3;")
+    simulation.translateAndExecute("3","SEND ’DHCP ACKNOWLEDGE’ to 1;")
+    simulation.translateAndExecute("1", "LISTEN ’DHCP ACKNOWLEDGE’ from 3;")
+    simulation.translateAndExecute("2", "LISTEN ’DHCP ACKNOWLEDGE’ from 3;")
     simulation.checkFinish()
 
     # STEP 5

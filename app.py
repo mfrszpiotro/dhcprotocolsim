@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap5
 
 from entity import Entity
 from utils import create_triplet, createTimestamp, writer
-import testing
+import testing, json, random
 
 # create the app
 app = Flask(__name__)
@@ -25,6 +25,13 @@ def index():
             session["step_number"] = 1
             session["blocked"] = []
             return redirect(url_for("step"))
+        
+        if request.form.get("automatic"):
+            session["descriptions"] = [create_triplet("", 1)]
+            session["log"] = "start point log "
+            session["step_number"] = 1
+            session["blocked"] = []
+            return redirect(url_for("automatic"))
 
         if request.form.get("alt"):
             session["descriptions"] = [create_triplet("", 4)]
@@ -40,15 +47,32 @@ def step():
     if request.method == "POST":
         if request.form.get("simulate"):
             session.pop("_flashes", None)
-            commands = [v for k, v in request.form.items() if k.startswith("e") and k.endswith(str(step_number))]
-            # commands to be translated into full simulation step execution
-            wasSimulated = True
-            # descriptions to be blocked if entity is deadlocked in this step
-            if commands and wasSimulated:
-                session["step_number"] = step_number+1
-                # data based on the output from the simulation:
-                session["log"] = session.get("log") + "\n" + str(commands)
-                session["blocked"] = [2]
+            commands = [
+                v
+                for k, v in request.form.items()
+                if k.startswith("e") and k.endswith(str(step_number))
+            ]
+            entities = []
+            if step_number == 1:
+                for index in range(len(commands)):
+                    entities.append(Entity(index + 1))
+            else:
+                for serialized_entity in session["entities"]:
+                    entities.append(
+                        json.loads(serialized_entity, object_hook=Entity.decoder)
+                    )
+
+            simulation_result = testing.test_stepByStep(commands, entities)
+
+            if commands and simulation_result:
+                serialized_entities = []
+                for entity in simulation_result[2]:
+                    serialized_entities.append(json.dumps(entity, cls=Entity.Encoder))
+                session["entities"] = serialized_entities
+
+                session["step_number"] = step_number + 1
+                session["log"] = session.get("log") + "\n" + simulation_result[0]
+                session["blocked"] = simulation_result[1]
             return redirect(url_for("step"))
 
         if request.form.get("add"):
@@ -68,9 +92,41 @@ def step():
         page_descriptions=session.get("descriptions")[1:],
         first_triplet=session.get("descriptions")[0],
         step_number=step_number,
-        blocked=blocked
+        blocked=blocked,
     )
 
+@app.route("/define/automatic", methods=["GET", "POST"])
+def automatic():
+    if request.method == "POST":
+        if request.form.get("simulate"):
+            entities = []
+            num_ent = int(request.form.get("entities"))
+            num_step = int(request.form.get("steps"))
+            for index in range(num_ent):
+                entities.append(Entity(index+1))
+            
+            for step_number in range(num_step):
+                options_actions = ['SEND "MESSAGE" TO ', 'LISTEN "MESSAGE" FROM ', "SKIP", "FINISH"]
+                options_dest = []
+                for index in range(num_ent):
+                    options_dest.append(index+1)
+
+                commands = []
+                for index in range(num_ent):
+                    string_builder = str(random.choice(options_actions))
+                    if string_builder.startswith(("SEND", "LISTEN")):
+                        string_builder = string_builder + str(random.choice(options_dest))
+                    commands.append(string_builder+'\n')
+
+                simulation_result = testing.test_stepByStep(commands, entities)
+                session["log"] = session.get("log") + "\n" + simulation_result[0]
+
+            return redirect(url_for("simulation"))
+
+        if request.form.get("back"):
+            return redirect(url_for("index"))
+
+    return render_template("automatic.html")
 
 @app.route("/define", methods=["GET", "POST"])
 def define():
@@ -106,8 +162,8 @@ def define():
 @app.route("/define/simulation", methods=["GET", "POST"])
 def simulation():
     log = session.get("log", None)
-    if log:
-        flash(log, "success")
+    if not log:
+        return redirect(url_for("index"))
 
     if request.method == "POST":
         if request.form.get("back"):
